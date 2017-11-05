@@ -25,7 +25,7 @@ echo \yii\bootstrap\Html::a("添加",['add'],['class'=>'btn btn-info']);?>
 
     <script type="text/javascript">
         <?php $this->beginblock("js"); ?>
-        $("table").on("click",".btn button",function () {
+        $("table").on("click",".btn",function () {
             if(confirm("确认删除")){
                 var id = $(this).attr('id');
                 var tr = $(this).closest('tr');

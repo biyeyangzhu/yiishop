@@ -17,6 +17,9 @@ use yii\web\UploadedFile;
 
 class BrandController extends Controller
 {
+    //关闭crf  yii2跨域提交
+    public $enableCsrfValidation =false;
+
     public function actionIndex()
     {
         //查询不是删除状态的
@@ -43,17 +46,9 @@ class BrandController extends Controller
         //验证post提交
         if ($request->isPost) {
             $model->load($request->post());
-            //处理上传文件
-            $model->imgfile = UploadedFile::getInstance($model, 'imgfile');
             //验证数据
             if ($model->validate()) {
                 //获取文件的后缀
-                $ext = $model->imgfile->extension;
-                $file = '/upload/' . uniqid() . '.' . $ext;
-                //上传文件永久保存到Uploads
-                $model->imgfile->saveAs(\Yii::getAlias('@webroot') . $file, false);
-                //数据库保存相对路径
-                $model->logo = $file;
                 $model->save();
                 //跳转到首页
                 \Yii::$app->session->setFlash('success', '添加成功');
@@ -87,15 +82,7 @@ class BrandController extends Controller
         $model = Brand::findOne(['id' => $id]);
         if ($request->isPost) {
             $model->load($request->post());
-            //处理上传文件
-            $model->imgfile = UploadedFile::getInstance($model, 'imgfile');
             if ($model->validate()) {
-                //获取文件的后缀
-                $ext = $model->imgfile->extension;
-                $file = '/upload/' . uniqid() . '.' . $ext;
-                //上传文件永久保存到Uploads
-                $model->imgfile->saveAs(\Yii::getAlias('@webroot') . $file, false);
-                $model->logo = $file;
                 $model->save();
                 //跳转
                 \Yii::$app->session->setFlash('success', '修改成功');
@@ -107,5 +94,21 @@ class BrandController extends Controller
         }
         //显示修改表单
         return $this->render('add', ['model' => $model]);
+    }
+
+    //ajax处理上传图片
+    public function actionUpload(){
+        //判断是不是post提交的
+        if(\Yii::$app->request->isPost){
+            $imgfile = UploadedFile::getInstanceByName('file');
+            //判断是否有上传文件
+            if($imgfile){
+                $ext = $imgfile->extension;
+                $file = '/upload/' . uniqid() . '.' . $ext;
+                //上传文件永久保存到Uploads
+                $imgfile->saveAs(\Yii::getAlias('@webroot') . $file, false);
+                echo json_encode(['url'=>$file]);
+            }
+        }
     }
 }
