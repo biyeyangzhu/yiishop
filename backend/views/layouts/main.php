@@ -37,9 +37,15 @@ AppAsset::register($this);
     ]);
     $menuItems = [
         ['label' => 'Home', 'url' => ['/site/index']],
+        ['label'=>'商品管理','items'=>[
+            ['label'=>'添加商品分类','url'=>['/goods-category/add']],
+            ['label'=>'商品分类列表','url'=>['/goods-category/index']],
+            ['label'=>'添加商品','url'=>['/goods/add']],
+            ['label'=>'商品添加','url'=>['/goods/index']],
+        ]]
     ];
     if (Yii::$app->user->isGuest) {
-        $menuItems[] = ['label' => 'Login', 'url' => ['/site/login']];
+        $menuItems[] =['label' => 'Login', 'url' => ['/site/login']];
     } else {
         $menuItems[] = '<li>'
             . Html::beginForm(['/site/logout'], 'post')

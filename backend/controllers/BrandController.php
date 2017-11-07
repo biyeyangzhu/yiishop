@@ -100,7 +100,7 @@ class BrandController extends Controller
         return $this->render('add', ['model' => $model]);
     }
 
-    //ajax处理上传图片
+    //ajax处理上传图片(七牛云)
     public function actionUpload()
     {
         //判断是不是post提交的
@@ -113,7 +113,7 @@ class BrandController extends Controller
                 //上传文件永久保存到Uploads
                 $imgfile->saveAs(\Yii::getAlias('@webroot') . $file, false);
                 // 需要填写你的 Access Key 和 Secret Key
-                $accessKey ="GmwzGPby8zB4kwx9VCIMo2-pyQwr7mehcKp8uRCx";
+                $accessKey = "GmwzGPby8zB4kwx9VCIMo2-pyQwr7mehcKp8uRCx";
                 $secretKey = "tqMfgKG8RtYLqyRWE_G1wquhUTm689rMU23iv3GP";
                 $bucket = "yii2shop";
                 $url = "oyxeyx2in.bkt.clouddn.com";
@@ -124,7 +124,7 @@ class BrandController extends Controller
                 $token = $auth->uploadToken($bucket);
 
 // 要上传文件的本地路径
-                $filePath =\Yii::getAlias('@webroot'). $file;
+                $filePath = \Yii::getAlias('@webroot') . $file;
 
 // 上传到七牛后保存的文件名
                 $key = $file;
@@ -139,19 +139,23 @@ class BrandController extends Controller
 
                 if ($err !== null) {
 //                    var_dump($err);
-                    echo json_encode(['error'=>$err]);
+                    echo json_encode(['error' => $err]);
                 } else {
 //                    var_dump($ret);
-                    echo json_encode(['url' => 'http://'.$url."/".$file]);
+                    echo json_encode(['url' => 'http://' . $url . "/" . $file]);
                 }
 
             }
 //                echo json_encode(['url' => $file]);
-            }
         }
+    }
 
 
-    public function actionTest()
+
+/**
+ * 七牛云上传测试
+ */
+   /* public function actionTest()
     {
 
 
@@ -183,5 +187,5 @@ class BrandController extends Controller
         } else {
             var_dump($ret);
         }
-    }
+    }*/
 }
