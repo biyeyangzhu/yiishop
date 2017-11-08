@@ -201,4 +201,12 @@ class GoodsController extends Controller
             }
         }
     }
+
+    /**
+     * 商品详情
+     */
+    public function actionView($id){
+        $model = GoodsIntro::findOne(['goods_id'=>$id]);
+        return $this->render("view",['model'=>$model]);
+    }
 }

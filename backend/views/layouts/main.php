@@ -20,7 +20,7 @@ AppAsset::register($this);
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <?= Html::csrfMetaTags() ?>
-    <title><?= Html::encode($this->title) ?></title>
+    <title>Apple(中国)-官方网站</title><?/*= Html::encode($this->title) */?>
     <?php $this->head() ?>
 </head>
 <body>
@@ -36,21 +36,25 @@ AppAsset::register($this);
         ],
     ]);
     $menuItems = [
-        ['label' => 'Home', 'url' => ['/site/index']],
+        ['label' => 'Home', 'url' => ['/user/index']],
         ['label'=>'商品管理','items'=>[
             ['label'=>'添加商品分类','url'=>['/goods-category/add']],
             ['label'=>'商品分类列表','url'=>['/goods-category/index']],
             ['label'=>'添加商品','url'=>['/goods/add']],
             ['label'=>'商品列表','url'=>['/goods/index']],
+        ]],
+        ['label'=>'用户管理','items'=>[
+            ['label'=>'添加管理员','url'=>['/user/add']],
+            ['label'=>'管理员列表','url'=>['/user/index']],
         ]]
     ];
     if (Yii::$app->user->isGuest) {
-        $menuItems[] =['label' => 'Login', 'url' => ['/site/login']];
+        $menuItems[] =['label' => '登录', 'url' => ['/user/login']];
     } else {
         $menuItems[] = '<li>'
-            . Html::beginForm(['/site/logout'], 'post')
+            . Html::beginForm(['/user/logout'], 'post')
             . Html::submitButton(
-                'Logout (' . Yii::$app->user->identity->username . ')',
+                '注销 (' . Yii::$app->user->identity->username . ')',
                 ['class' => 'btn btn-link logout']
             )
             . Html::endForm()

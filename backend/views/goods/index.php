@@ -39,7 +39,7 @@
                 <td width="350px"><a class="btn btn-success" href="gallery-index?id=<?=$v->id?>"><span class="glyphicon glyphicon-picture"></span>相册</a>&nbsp;
                     <a class="btn btn-warning" href="edit?id=<?=$v->id?>" ><span class="glyphicon glyphicon-edit"></span>修改</a>&nbsp;
                     <a class="btn btn-danger" id="<?=$v->id?>" name="del" ><span class="glyphicon glyphicon-trash"></span>删除</a>&nbsp;
-                    <a class="btn btn-info" ><span class="glyphicon glyphicon-log-in"></span>预览</a>
+                    <a class="btn btn-info"  href="view?id=<?=$v->id?>"><span class="glyphicon glyphicon-log-in"></span>预览</a>
                 </td>
             </tr>
         <?php endforeach;?>
