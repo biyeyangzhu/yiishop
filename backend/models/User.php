@@ -15,12 +15,14 @@ use yii\web\IdentityInterface;
 
 class User extends ActiveRecord implements IdentityInterface
 {
+    public $role;
     public function attributeLabels()
     {
         return [
             'username'=>'用户名',
             'email'=>'邮箱',
             'password_hash'=>'密码',
+            'role'=>'角色'
         ];
 
     }
@@ -28,7 +30,7 @@ class User extends ActiveRecord implements IdentityInterface
     public function rules()
     {
         return [
-            [['email','password_hash','username'], 'required','message'=>'不能为空'],
+            [['email','password_hash','username','role'], 'required','message'=>'不能为空'],
             ['username', 'unique', 'targetClass' => '\backend\models\User', 'message' => '这个用户名已经被采取'],
             ['email','email','message'=>'请正确填写邮箱规则'],
         ];

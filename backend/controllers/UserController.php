@@ -13,6 +13,7 @@ use backend\models\LoginForm;
 use backend\models\PasswordForm;
 use backend\models\User;
 use yii\data\Pagination;
+use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\Request;
 
@@ -35,6 +36,11 @@ class UserController extends Controller
 
     public function actionAdd()
     {
+        //实例化auth_manager组件进行管理rbac
+        $auth = \Yii::$app->authManager;
+        //查询出所有的角色
+        $roles = $auth->getRoles();
+        $roles = ArrayHelper::map($roles,'name','name');
         $model = new User();
         $request = new Request();
         if($request->isPost) {
@@ -44,6 +50,14 @@ class UserController extends Controller
                 $model->created_at = time();
                 $model->auth_key = \Yii::$app->security->generateRandomString();
                 $model->save();
+                //获取添加用户的id
+                $id = $model->getOldAttribute('id');
+                //获取对应的角色
+                foreach ($model->role as $value){
+                    //逐个获取多个角色名的角色对象
+                    $role = $auth->getRole($value);
+                    $auth->assign($role,$id);
+                }
                 //跳转到首页
                 \Yii::$app->session->setFlash('success', '添加成功');
                 return $this->redirect('index');
@@ -52,7 +66,7 @@ class UserController extends Controller
                 var_dump($model->getErrors());
             }
         }
-        return $this->render('add', ['model' => $model]);
+        return $this->render('add', ['model' => $model,'roles'=>$roles]);
     }
 
     public function actionDelete($id)
@@ -69,7 +83,14 @@ class UserController extends Controller
 
     public function actionEdit($id)
     {
+        //实例化auth_manager组件进行管理rbac
+        $auth = \Yii::$app->authManager;
+        //查询出所有的角色
+        $roles = $auth->getRoles();
+        $roles = ArrayHelper::map($roles,'name','name');
         $model = User::findOne(['id'=>$id]);
+        //将获取到的角色下的所有权限赋值给model
+        $model->role = array_keys($auth->getRolesByUser($id));
         $request = new Request();
         $model->password_hash ='';
         if($request->isPost){
@@ -78,6 +99,15 @@ class UserController extends Controller
 //            $model->updated_at = time();
             if($model->validate()){
                 $model->save();
+                $auth->revokeAll($id);
+                //获取添加用户的id
+                $id = $model->getOldAttribute('id');
+                //获取对应的角色
+                foreach ($model->role as $value){
+                    //逐个获取多个角色名的角色对象
+                    $role = $auth->getRole($value);
+                    $auth->assign($role,$id);
+                }
                 //跳转到首页
                 \Yii::$app->session->setFlash('success', '添加成功');
                 return $this->redirect('index');
@@ -86,7 +116,7 @@ class UserController extends Controller
                 var_dump($model->getErrors());
         }
         }
-        return $this->render('add', ['model' => $model]);
+        return $this->render('add', ['model' => $model,'roles'=>$roles]);
     }
 
     /**

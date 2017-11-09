@@ -20,7 +20,7 @@ AppAsset::register($this);
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <?= Html::csrfMetaTags() ?>
-    <title>Apple(中国)-官方网站</title><?/*= Html::encode($this->title) */?>
+    <title>Apple(大中华区)-官方网站</title>
     <?php $this->head() ?>
 </head>
 <body>
@@ -46,6 +46,12 @@ AppAsset::register($this);
         ['label'=>'用户管理','items'=>[
             ['label'=>'添加管理员','url'=>['/user/add']],
             ['label'=>'管理员列表','url'=>['/user/index']],
+        ]],
+        ['label'=>'RBAC','items'=>[
+            ['label'=>'添加权限','url'=>['/auth/add-permission']],
+            ['label'=>'权限列表','url'=>['/auth/index-permission']],
+            ['label'=>'角色添加','url'=>['/auth/add-role']],
+            ['label'=>'角色列表','url'=>['/auth/index-role']],
         ]]
     ];
     if (Yii::$app->user->isGuest) {
