@@ -19,7 +19,7 @@ use yii\web\Controller;
 class ArticleController extends Controller
 {
     public function actionIndex(){
-    //查询数据
+         //查询数据
         $query = Article::find()->where(['>=','status','0']);
         //创建分页工具类
         $page = new Pagination();

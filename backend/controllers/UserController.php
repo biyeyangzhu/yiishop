@@ -40,10 +40,10 @@ class UserController extends Controller
         $auth = \Yii::$app->authManager;
         //查询出所有的角色
         $roles = $auth->getRoles();
-        $roles = ArrayHelper::map($roles,'name','name');
+        $roles = ArrayHelper::map($roles, 'name', 'name');
         $model = new User();
         $request = new Request();
-        if($request->isPost) {
+        if ($request->isPost) {
             $model->load($request->post());
             if ($model->validate()) {
                 $model->password_hash = \Yii::$app->security->generatePasswordHash($model->password_hash);
@@ -53,10 +53,10 @@ class UserController extends Controller
                 //获取添加用户的id
                 $id = $model->getOldAttribute('id');
                 //获取对应的角色
-                foreach ($model->role as $value){
+                foreach ($model->role as $value) {
                     //逐个获取多个角色名的角色对象
                     $role = $auth->getRole($value);
-                    $auth->assign($role,$id);
+                    $auth->assign($role, $id);
                 }
                 //跳转到首页
                 \Yii::$app->session->setFlash('success', '添加成功');
@@ -66,12 +66,12 @@ class UserController extends Controller
                 var_dump($model->getErrors());
             }
         }
-        return $this->render('add', ['model' => $model,'roles'=>$roles]);
+        return $this->render('add', ['model' => $model, 'roles' => $roles]);
     }
 
     public function actionDelete($id)
     {
-    //删除将status状态改为0表名为删除
+        //删除将status状态改为0表名为删除
         $result = User::updateAll(['status' => 0], ['id' => $id]);
         if ($result) {
             //修改成功 返回数据
@@ -87,59 +87,61 @@ class UserController extends Controller
         $auth = \Yii::$app->authManager;
         //查询出所有的角色
         $roles = $auth->getRoles();
-        $roles = ArrayHelper::map($roles,'name','name');
-        $model = User::findOne(['id'=>$id]);
+        $roles = ArrayHelper::map($roles, 'name', 'name');
+        $model = User::findOne(['id' => $id]);
         //将获取到的角色下的所有权限赋值给model
         $model->role = array_keys($auth->getRolesByUser($id));
         $request = new Request();
-        $model->password_hash ='';
-        if($request->isPost){
+        $model->password_hash = '';
+        if ($request->isPost) {
             $model->load($request->post());
             $model->password_hash = \Yii::$app->security->generatePasswordHash($model->password_hash);
 //            $model->updated_at = time();
-            if($model->validate()){
+            if ($model->validate()) {
                 $model->save();
+                //删除用户和角色之间的关系
                 $auth->revokeAll($id);
                 //获取添加用户的id
                 $id = $model->getOldAttribute('id');
                 //获取对应的角色
-                foreach ($model->role as $value){
+                foreach ($model->role as $value) {
                     //逐个获取多个角色名的角色对象
                     $role = $auth->getRole($value);
-                    $auth->assign($role,$id);
+                    $auth->assign($role, $id);
                 }
                 //跳转到首页
                 \Yii::$app->session->setFlash('success', '添加成功');
                 return $this->redirect('index');
-            }else {
+            } else {
                 //打印错误信息
                 var_dump($model->getErrors());
+            }
         }
-        }
-        return $this->render('add', ['model' => $model,'roles'=>$roles]);
+        return $this->render('add', ['model' => $model, 'roles' => $roles]);
     }
 
     /**
      * 登录
      * @return string|\yii\web\Response
      */
-    public function actionLogin(){
-        if(\Yii::$app->user->isGuest){
+    public function actionLogin()
+    {
+        if (\Yii::$app->user->isGuest) {
             $model = new LoginForm();
             $request = new Request();
-            if($request->isPost){
+            if ($request->isPost) {
                 $model->load($request->post());
-                if($model->validate()){
+                if ($model->validate()) {
                     //验证登录是否成功
 //                    var_dump($model);die;
-                    if($model->Login()){
+                    if ($model->Login()) {
                         //成功跳转保存最后登录时间和最后登录的ip
-                        $user = User::findOne(['username'=>$model->username]);
+                        $user = User::findOne(['username' => $model->username]);
                         $ip = \Yii::$app->request->userIP;
-                        $user->last_login_ip=$ip;
-                        $user->last_login_time=time();
+                        $user->last_login_ip = $ip;
+                        $user->last_login_time = time();
                         //将登录标识保存到session验证是否记住我
-                        \Yii::$app->user->login($user,$model->remember?3600*24*30:0);
+                        \Yii::$app->user->login($user, $model->remember ? 3600 * 24 * 30 : 0);
                         $user->save();
                         //跳转到首页
 //                    var_dump(\Yii::$app->user->isGuest);die();
@@ -148,8 +150,8 @@ class UserController extends Controller
                     }
                 }
             }
-            return $this->render('login',['model'=>$model]);
-        }else{
+            return $this->render('login', ['model' => $model]);
+        } else {
             return $this->redirect('index');
         }
 
@@ -159,7 +161,8 @@ class UserController extends Controller
      * 注销登录
      * @return \yii\web\Response
      */
-    public function actionLogout(){
+    public function actionLogout()
+    {
         \Yii::$app->user->logout();
         return $this->redirect(['login']);
     }
@@ -167,7 +170,8 @@ class UserController extends Controller
     /**
      * 修改个人账号的密码
      */
-    public function actionUpdate(){
+    public function actionUpdate()
+    {
         $model = new PasswordForm();
         $request = \Yii::$app->request;
         if ($request->isPost) {
@@ -193,7 +197,7 @@ class UserController extends Controller
 
             }
         }
-        return $this->render('password',['model'=>$model]);
+        return $this->render('password', ['model' => $model]);
     }
 
 }

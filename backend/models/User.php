@@ -36,6 +36,23 @@ class User extends ActiveRecord implements IdentityInterface
         ];
     }
 
+    public function getMenus(){
+        $menuItems =[];
+        $menus = Menu::find()->where(['parent_id'=>0])->all();
+        foreach ($menus as $menu){
+            $items =[];
+            foreach ($menu->children as $child){
+                if(\Yii::$app->user->can($child->url)){
+                    $items[]=['label'=>$child->name,'url'=>[$child->url]];
+                }
+            }
+            $menuItem=['label'=>$menu->name,'items'=>$items];
+            if($items){
+                $menuItems[]=$menuItem;
+            }
+        }
+        return $menuItems;
+    }
     /**
      * Finds an identity by the given ID.
      * @param string|int $id the ID to be looked for

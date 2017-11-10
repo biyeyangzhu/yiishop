@@ -20,7 +20,7 @@ AppAsset::register($this);
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <?= Html::csrfMetaTags() ?>
-    <title>Apple(大中华区)-官方网站</title>
+    <title>Apple(金叫唤)-官方网站</title>
     <?php $this->head() ?>
 </head>
 <body>
@@ -35,7 +35,7 @@ AppAsset::register($this);
             'class' => 'navbar-inverse navbar-fixed-top',
         ],
     ]);
-    $menuItems = [
+   /* $menuItems = [
         ['label' => 'Home', 'url' => ['/user/index']],
         ['label'=>'商品管理','items'=>[
             ['label'=>'添加商品分类','url'=>['/goods-category/add']],
@@ -53,10 +53,12 @@ AppAsset::register($this);
             ['label'=>'角色添加','url'=>['/auth/add-role']],
             ['label'=>'角色列表','url'=>['/auth/index-role']],
         ]]
-    ];
+    ];*/
     if (Yii::$app->user->isGuest) {
+        $menuItems=[];
         $menuItems[] =['label' => '登录', 'url' => ['/user/login']];
     } else {
+        $menuItems= Yii::$app->user->identity->Menus;
         $menuItems[] = '<li>'
             . Html::beginForm(['/user/logout'], 'post')
             . Html::submitButton(

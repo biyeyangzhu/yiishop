@@ -76,8 +76,9 @@ class GoodsCategoryController extends Controller
                     ////判断是parent_id是不是0 新建树
                     if ($parent_id == 0) {
                         $model->save();
+                    }else{
+                        $model->makeRoot();
                     }
-                    $model->makeRoot();
                 } else {
                     $parent = GoodsCategory::findOne(['id' => $model->parent_id]);
                     $model->prependTo($parent);
