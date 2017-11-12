@@ -19,7 +19,7 @@ use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\Request;
 
-class GoodsController extends Controller
+class GoodsController extends CommonController
 {
     public $enableCsrfValidation = false;
 

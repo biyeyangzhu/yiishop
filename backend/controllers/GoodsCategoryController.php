@@ -13,7 +13,7 @@ use backend\models\GoodsCategory;
 use yii\web\Controller;
 use yii\web\Request;
 
-class GoodsCategoryController extends Controller
+class GoodsCategoryController extends CommonController
 {
 
     public function actionAdd()

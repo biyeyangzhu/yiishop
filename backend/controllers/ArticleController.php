@@ -16,7 +16,7 @@ use yii\data\Pagination;
 use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 
-class ArticleController extends Controller
+class ArticleController extends CommonController
 {
     public function actionIndex(){
          //查询数据

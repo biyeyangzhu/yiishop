@@ -13,7 +13,7 @@ use backend\models\Menu;
 use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 
-class MenuController extends Controller
+class MenuController extends CommonController
 {
     public function actionAdd(){
         $auth = \Yii::$app->authManager;

@@ -19,7 +19,7 @@ use Qiniu\Auth;
 // 引入上传类
 use Qiniu\Storage\UploadManager;
 
-class BrandController extends Controller
+class BrandController extends CommonController
 {
     //关闭crf  yii2跨域提交
     public $enableCsrfValidation = false;

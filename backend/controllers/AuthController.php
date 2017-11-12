@@ -14,7 +14,7 @@ use backend\models\RoleForm;
 use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 
-class AuthController extends Controller
+class AuthController extends CommonController
 {
 
     /**

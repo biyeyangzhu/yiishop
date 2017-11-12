@@ -11,9 +11,9 @@ namespace backend\controllers;
 
 use backend\models\ArticleCategory;
 use yii\data\Pagination;
-use yii\web\Controller;
 
-class ArticleCategoryController extends Controller
+
+class ArticleCategoryController extends CommonController
 {
     public function actionIndex(){
     //查询数据
