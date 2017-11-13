@@ -20,7 +20,7 @@ AppAsset::register($this);
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <?= Html::csrfMetaTags() ?>
-    <title>Apple(金叫唤)-官方网站</title>
+    <title>NaoMaLe(金叫唤)-官方网站</title>
     <?php $this->head() ?>
 </head>
 <body>

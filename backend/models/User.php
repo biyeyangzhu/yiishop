@@ -36,6 +36,10 @@ class User extends ActiveRecord implements IdentityInterface
         ];
     }
 
+    /**
+     * 菜单的生成
+     * @return array
+     */
     public function getMenus(){
         $menuItems =[];
         $menus = Menu::find()->where(['parent_id'=>0])->all();

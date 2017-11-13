@@ -47,7 +47,6 @@ class UserController extends Controller
             $model->load($request->post());
             if ($model->validate()) {
                 $model->password_hash = \Yii::$app->security->generatePasswordHash($model->password_hash);
-                $model->created_at = time();
                 $model->auth_key = \Yii::$app->security->generateRandomString();
                 $model->save();
                 //获取添加用户的id
