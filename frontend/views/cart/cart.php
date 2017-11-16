@@ -74,7 +74,7 @@
             <th class="col6">操作</th>
         </tr>
         </thead>
-            <?=\frontend\models\Cart::GoodsCart($model)?>
+            <?=\frontend\models\Cart::GoodsCart($model,$carts)?>
         <tfoot>
         <tr>
             <td colspan="6">购物金额总计： <strong>￥ <span id="total"></span></strong></td>
@@ -127,9 +127,9 @@
         //删除购物车
         $("#table").on('click','[name=del]',function () {
             if(confirm("确认删除?")){
-                var id = $(this).attr('id');
+                var goods_id = $(this).closest('tr').attr('data-id');
                 var tr = $(this).closest('tr');
-                $.getJSON('delete',{id:id},function (data) {
+                $.getJSON('delete',{goods_id:goods_id},function (data) {
                     if(data){
                         tr.remove();
                     }
@@ -139,20 +139,20 @@
         //点击减少
         $("#table").on('click',".reduce_num",function(){
             var amount = $(this).parent().find(".amount").val();
-            var id = $(this).parent().find(".amount").attr('id');
-            $.getJSON('reduce',{amount:amount,id:id})
+            var goods_id = $(this).closest('tr').attr('data-id');
+            $.getJSON('reduce',{amount:amount,goods_id:goods_id})
         });
         //点击增加
         $(".add_num").click(function(){
             var amount = $(this).parent().find(".amount").val();
-            var id = $(this).parent().find(".amount").attr('id');
-            $.getJSON('reduce',{amount:amount,id:id})
+            var goods_id = $(this).closest('tr').attr('data-id');
+            $.getJSON('reduce',{amount:amount,goods_id:goods_id})
         })
         //直接输入数量的处理
         $(".amount").blur(function(){
             var amount =$(this).val();
-            var id = $(this).attr('id');
-            $.getJSON('reduce',{amount:amount,id:id})
+            var goods_id = $(this).closest('tr').attr('data-id');
+            $.getJSON('reduce',{amount:amount,goods_id:goods_id})
             })
     })
 

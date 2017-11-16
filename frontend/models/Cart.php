@@ -21,27 +21,30 @@ class Cart extends ActiveRecord
         ];
     }
 
-    public static function GoodsCart($model){
+    public static function GoodsCart($model,$carts){
         $html='';
-        $count = 0;
         foreach ($model as $value):
-            $goods = Goods::findOne(['id'=>$value['goods_id']]);
-            $count +=$goods->shop_price*$value['amount'];
             $html .= '<tbody>
-                    <tr>
-        <td class="col1"><a href=""><img src='.$goods->logo.' alt="" /></a>  <strong><a href="">'.$goods->name.'</a></strong></td>
-        <td class="col3">￥<span>'.$goods->shop_price.'</span></td>
+                    <tr data-id='.$value->id.'>
+        <td class="col1"><a href=""><img src='.$value->logo.' alt="" /></a>  <strong><a href="">'.$value->name.'</a></strong></td>
+        <td class="col3">￥<span>'.$value->shop_price.'</span></td>
         <td class="col4">
             <a href="javascript:;" class="reduce_num"></a>
-            <input type="text" name="amount" value='.$value['amount'].' class="amount" id='.$value['id'].'/>
+            <input type="text" name="amount" value='.$carts[$value->id].' class="amount" />
             <a href="javascript:;" class="add_num"></a>
         </td>
-        <td class="col5">￥<span>'.$goods->shop_price*$value['amount'].'</span></td>
-        <td class="col6"><a href="javascript:;"name="del" id='.$value['id'].'>删除</a></td>
+        <td class="col5">￥<span>'.$value->shop_price*$carts[$value->id].'.00</span></td>
+        <td class="col6"><a href="javascript:;"name="del">删除</a></td>
     </tr>
      </tbody>';
         endforeach;
         return $html;
     }
 
+    /**
+     * 封装操作cookie的方法
+     */
+    public function Cookie(){
+
+    }
 }
