@@ -54,7 +54,7 @@
                 <ul>
                     <li>
                         <label for="">用户名：</label>
-                        <input type="text" class="txt" name="username" />
+                        <input type="text" class="txt" name="username" id="username"/>
                         <p>3-20位字符，可由中文、字母、数字和下划线组成</p>
                     </li>
                     <li>
@@ -69,7 +69,7 @@
                     </li>
                     <li>
                         <label for="">邮箱：</label>
-                        <input type="text" class="txt" name="email" />
+                        <input type="text" class="txt" name="email" id="email"/>
                         <p>请输入一个正确的邮箱</p>
                     </li>
                     <li>
@@ -140,6 +140,37 @@
 </div>
 <!-- 底部版权 end -->
 <script type="text/javascript">
+    function bindPhoneNum() {
+        //1点击发送短信验证码按钮,获取手机号码,通过AJAX请求发送短信
+        var phone = $("#tel").val();
+        //手机号码判断
+        $.get("<?=\yii\helpers\Url::to(['member/sms'])?>", {phone: phone}, function (data) {
+            if (data == 'success') {
+                alert('短信发送成功');
+            } else {
+                //发送失败
+                alert('短信发送失败,请稍后再试.');
+            }
+        });
+        //启用输入框
+        $('#captcha').prop('disabled',false);
+
+        var time=60;
+        var interval = setInterval(function(){
+            time--;
+            if(time<=0){
+                clearInterval(interval);
+                var html = '获取验证码';
+                $('#get_captcha').prop('disabled',false);
+            } else{
+                var html = time + ' 秒后再次获取';
+                $('#get_captcha').prop('disabled',true);
+            }
+
+            $('#get_captcha').val(html);
+        },1000);
+    }
+
     $().ready(function() {
 // 在键盘按下并释放及提交后验证提交表单
         $("#register_form").validate({
@@ -150,7 +181,7 @@
                     maxlength:20,
                     //                异步验证用户名的唯一性
                     remote:{
-                        url:"<?=\yii\helpers\Url::to(['member/check-name'])?>"
+                        url:"<?=\yii\helpers\Url::to(['member/check-name'])?>",
                     },
                 },
                 password: {
@@ -158,7 +189,19 @@
                     minlength: 6,
                     maxlength: 20,
                 },
-
+                captcha:{
+                    remote:{
+                        url:"<?=\yii\helpers\Url::to(['member/check-captcha'])?>",
+                        data: {                     //要传递的数据
+                            captcha: function() {
+                                return $("#captcha").val();
+                            },
+                            tel:function () {
+                                return $("#tel").val();
+                            }
+                        }
+                    },
+                },
                 confirm_password: {
                     required: true,
                     minlength: 6,
@@ -170,7 +213,7 @@
                     number:true,
                     //                异步验证手机唯一性
                     remote:{
-                        url:"<?=\yii\helpers\Url::to(['member/check-tel'])?>"
+                        url:"<?=\yii\helpers\Url::to(['member/check-tel'])?>",
                     },
                 },
                 email: {
@@ -178,7 +221,7 @@
                     email: true,
                     //                异步验证邮箱唯一性
                     remote:{
-                        url:"<?=\yii\helpers\Url::to(['member/check-email'])?>"
+                        url:"<?=\yii\helpers\Url::to(['member/check-email'])?>",
                     },
                 },
                 checkcode:{
@@ -210,7 +253,10 @@
                 tel:{
                     required:"请输入正确的11位手机号",
                     remote:"手机号已被注册",
-                }
+                },
+                captcha:{
+                    remote:"验证码错误",
+                },
                 agree: "请接受我们的声明",
             },
             //设置错误信息的标签

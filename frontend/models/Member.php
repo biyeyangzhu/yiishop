@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: melo
- * Date: 2017/11/12
- * Time: 15:21
- */
 
 namespace frontend\models;
 
@@ -14,11 +8,28 @@ use yii\web\IdentityInterface;
 
 class Member extends ActiveRecord implements IdentityInterface
 {
+    public $captcha;
+    public $checkcode;
+
     public function rules()
     {
         return [
-            [['username','password_hash','email','tel'], 'safe'],
+            [['username', 'password_hash', 'email', 'tel', 'checkcode'], 'safe'],
+            ['captcha', 'validatecaptcha']
         ];
+    }
+
+    public function validatecaptcha()
+    {
+        $redies = new \Redis();
+        $redies->connect('127.0.0.1');
+        $code = $redies->get('captcha_' . $this->tel);
+        if ($this->captcha == $code) {
+            return true;
+        } else {
+            return false;
+        }
+
     }
 
     public function behaviors()
@@ -43,7 +54,7 @@ class Member extends ActiveRecord implements IdentityInterface
      */
     public static function findIdentity($id)
     {
-        return Member::findOne(['id'=>$id]);
+        return Member::findOne(['id' => $id]);
     }
 
     /**
@@ -96,6 +107,6 @@ class Member extends ActiveRecord implements IdentityInterface
      */
     public function validateAuthKey($authKey)
     {
-        return $this->auth_key===$authKey;
+        return $this->auth_key === $authKey;
     }
 }
