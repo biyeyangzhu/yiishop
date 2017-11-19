@@ -83,7 +83,7 @@
     </table>
     <div class="cart_btn w990 bc mt10">
         <a href=<?=\yii\helpers\Url::to(['shop/index'])?> class="continue">继续购物</a>
-        <a href="" class="checkout">结 算</a>
+        <a href=<?=\yii\helpers\Url::to(['order/index'])?> class="checkout">结 算</a>
     </div>
 </div>
 <!-- 主体部分 end -->
@@ -132,6 +132,12 @@
                 $.getJSON('delete',{goods_id:goods_id},function (data) {
                     if(data){
                         tr.remove();
+                        //计算总计
+                        var total = 0;
+                        $(".col5 span").each(function(){
+                            total += parseFloat($(this).text());
+                        });
+                        $("#total").text(total.toFixed(2));
                     }
                 })
             }

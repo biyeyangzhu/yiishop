@@ -100,6 +100,7 @@ class CartController extends Controller
             $cookie= new Cookie();
             $cookie->name='carts';
             $cookie->value=serialize($carts);
+            $cookie->expire=time()+3600*24*7;
             $cookies->add($cookie);
         }else{
             //获取登录用户的id
@@ -175,6 +176,7 @@ class CartController extends Controller
             $cookie = new Cookie();
             $cookie->name = 'carts';
             $cookie->value = serialize($carts);
+            $cookie->expire=time()+3600*24*7;
             $cookies->add($cookie);
         }else{
         $model = Cart::findOne(['goods_id'=>$goods_id]);
