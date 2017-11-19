@@ -22,17 +22,22 @@ class OrderController extends Controller
 {
     public $enableCsrfValidation;
     public function actionIndex(){
-        $request = \Yii::$app->request;
-        $member_id =\Yii::$app->user->id;
-        $address =address::find()->where(['member_id'=>$member_id])->all();
-        $cartall = Cart::find()->where(['member_id' => $member_id])->asArray()->all();
-        $carts=[];
-        //处理数据 将goods_id作为键 amount作为值存入数组
-        foreach ($cartall as $cart){
-            $carts[$cart['goods_id']]=$cart['amount'];
+        if(\Yii::$app->user->isGuest){
+            return $this->redirect(["member/login"]);
+        }else{
+            $request = \Yii::$app->request;
+            $member_id =\Yii::$app->user->id;
+            $address =address::find()->where(['member_id'=>$member_id])->all();
+            $cartall = Cart::find()->where(['member_id' => $member_id])->asArray()->all();
+            $carts=[];
+            //处理数据 将goods_id作为键 amount作为值存入数组
+            foreach ($cartall as $cart){
+                $carts[$cart['goods_id']]=$cart['amount'];
+            }
+            $model = Goods::find()->where(['in','id',array_keys($carts)])->all();
+            return $this->render('flow',['address'=>$address,'model'=>$model,'carts'=>$carts]);
         }
-        $model = Goods::find()->where(['in','id',array_keys($carts)])->all();
-        return $this->render('flow',['address'=>$address,'model'=>$model,'carts'=>$carts]);
+
     }
 
     public function actionAdd(){
