@@ -14,7 +14,6 @@ use frontend\models\address;
 use frontend\models\Cart;
 use frontend\models\Order;
 use frontend\models\OrderGoods;
-use Symfony\Component\Yaml\Yaml;
 use yii\db\Exception;
 use yii\web\Controller;
 
@@ -72,12 +71,15 @@ class OrderController extends Controller
                             $order->logo = $goods->logo;
                             $order->price = $goods->shop_price;
                             $order->amount = $cart->amount;
+                            //验证库存小于订单数量
                             if($cart->amount>$goods->stock){
                                 throw new Exception($goods->name."商品库存不足");
                             }
                             $order->total = $cart->amount*$goods->shop_price;
                             $order->order_id = $model->getOldAttribute('id');
+                            //修改goods表的库存
                             Goods::updateAllCounters(['stock'=>-$cart->amount],['id'=>$cart->goods_id]);
+                            //清空购物车
                             $cart->delete();
                             $order->save();
                         }

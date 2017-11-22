@@ -118,9 +118,14 @@ class GoodsController extends CommonController
         return [
             'upload' => [
                 'class' => 'kucha\ueditor\UEditorAction',
-            ]
-        ];
-    }
+                'config' => [
+                    "imageUrlPrefix"  => "http://admin.yii2shop.com",//图片访问路径前缀
+                    "imagePathFormat" => "/upload/image/{yyyy}{mm}{dd}/{time}{rand:6}" ,//上传保存路径
+                "imageRoot" => \Yii::getAlias("@webroot"),
+            ],
+        ]
+    ];
+}
 
     public function actionDelete($id)
     {
@@ -209,4 +214,6 @@ class GoodsController extends CommonController
         $model = GoodsIntro::findOne(['goods_id'=>$id]);
         return $this->render("view",['model'=>$model]);
     }
+
+
 }

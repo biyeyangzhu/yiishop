@@ -107,7 +107,8 @@ class CartController extends Controller
             $member_id = \Yii::$app->user->id;
             //判断这个商品是不是已经在购物车
             $goods_id = $request->post('goods_id');
-            $count = Cart::findOne(['goods_id' => $goods_id]);
+            $count = Cart::findOne(['goods_id' => $goods_id,'member_id'=>$member_id]);
+//            var_dump($count);die;
             if ($count) {
                 //在购物车就对数量进行修改
                 $amount = $count->amount;
