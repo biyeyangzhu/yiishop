@@ -13,20 +13,82 @@ use backend\models\Goods;
 use backend\models\GoodsCategory;
 use backend\models\GoodsGallery;
 use backend\models\GoodsIntro;
+use frontend\models\SphinxClient;
 use yii\data\Pagination;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 use yii\web\Controller;
 
 class ShopController extends Controller
 {
-
     /**
      * 商城首页
      * @return string
      */
     public function actionIndex()
     {
+        $request = \Yii::$app->request;
+//        var_dump($request->get());die;
+        $cl = new SphinxClient();
+        $cl->SetServer ( '127.0.0.1', 9312);//设置sphinx的searchd服务信息
+
+        $cl->SetConnectTimeout ( 10 );//超时
+        $cl->SetArrayResult ( true );//结果以数组形式返回
+// $cl->SetMatchMode ( SPH_MATCH_ANY);
+        $cl->SetMatchMode ( SPH_MATCH_EXTENDED2);//设置匹配模式
+        $cl->SetLimits(0, 1000);//设置分页
+        $info = $request->get('search');//查询关键字
+        //进行查询   Query(查询关键字,使用的索引)
+        $res = $cl->Query($info, 'goods');//shopstore_search
+//print_r($cl);
+        //print_r($res);
+        if(isset($res['matches'])){
+            //查询到结果
+            $ids = ArrayHelper::map($res['matches'],'id','id');
+            //var_dump($ids);
+            $query = Goods::find()->where(['in','id',$ids]);
+            //分页工具
+            $pager = new Pagination();
+            $pager->totalCount = $query->count();
+            $pager->pageSize = 4;
+            $models = $query->limit($pager->limit)->offset($pager->offset)->all();
+            return $this->render('list', ['goods' => $models, 'page' => $pager]);
+
+        }else{
+            //没有查询到结果
+            return $this->render('index');
+        }
         return $this->render('index');
+    }
+
+    /**
+     * sphinx 的全文检索测试
+     * 中文分词搜索测试
+     */
+    public function actionSearch(){
+        $cl = new SphinxClient();
+        $cl->SetServer ( '127.0.0.1', 9312);//设置sphinx的searchd服务信息
+
+        $cl->SetConnectTimeout ( 10 );//超时
+        $cl->SetArrayResult ( true );//结果以数组形式返回
+// $cl->SetMatchMode ( SPH_MATCH_ANY);
+        $cl->SetMatchMode ( SPH_MATCH_EXTENDED2);//设置匹配模式
+        $cl->SetLimits(0, 1000);//设置分页
+        $info = "";//查询关键字
+        //进行查询   Query(查询关键字,使用的索引)
+        $res = $cl->Query($info, 'goods');//shopstore_search
+//print_r($cl);
+        //print_r($res);
+        if(isset($res['matches'])){
+            //查询到结果
+            $ids = ArrayHelper::map($res['matches'],'id','id');
+            //var_dump($ids);
+
+        }else{
+            //没有查询到结果
+        }
+
+
     }
 
     /**

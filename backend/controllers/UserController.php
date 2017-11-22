@@ -145,13 +145,13 @@ class UserController extends Controller
                         //跳转到首页
 //                    var_dump(\Yii::$app->user->isGuest);die();
                         \Yii::$app->session->setFlash('success', '登录成功');
-                        return $this->redirect('index');
+                        return $this->redirect(['index']);
                     }
                 }
             }
             return $this->render('login', ['model' => $model]);
         } else {
-            return $this->redirect('index');
+            return $this->redirect(['index']);
         }
 
     }

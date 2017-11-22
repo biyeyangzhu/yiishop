@@ -24,7 +24,7 @@
         <div class="topnav_right fr">
             <ul>
                 <?php if(Yii::$app->user->isGuest):?>
-                <li>您好，欢迎来到金叫唤！[<a href="login.html">登录</a>] [<a href="register.html">免费注册</a>] </li>
+                <li>您好，欢迎来到金叫唤！[<a href=<?=\yii\helpers\Url::to(['member/login'])?>>登录</a>] [<a href=<?=\yii\helpers\Url::to(['member/register'])?>>免费注册</a>] </li>
                 <?php else:?>
                 <li>您好,<?=Yii::$app->user->identity->username?> 欢迎来到金叫唤！[<a href=<?=\yii\helpers\Url::to(['member/logout'])?>>注销</a>] </li>
                 <?php endif;?>
@@ -51,7 +51,7 @@
             <div class="search_form">
                 <div class="form_left fl"></div>
                 <form action="" name="serarch" method="get" class="fl">
-                    <input type="text" class="txt" value="请输入商品关键字" /><input type="submit" class="btn" value="搜索" />
+                    <input type="text" name="search" class="txt" placeholder="请输入商品名" value="" /><input type="submit" class="btn" value="搜索" />
                 </form>
                 <div class="form_right fl"></div>
             </div>

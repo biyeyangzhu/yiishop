@@ -58,8 +58,8 @@
             <div class="search fl">
                 <div class="search_form">
                     <div class="form_left fl"></div>
-                    <form action="" name="serarch" method="get" class="fl">
-                        <input type="text" class="txt" value="请输入商品关键字"/><input type="submit" class="btn" value="搜索"/>
+                    <form action=<?php \yii\helpers\Url::to(['shop/index'])?> name="serarch" method="get" class="fl">
+                        <input type="text" class="txt" name="search" placeholder="请输入商品名" value=""  /><input type="submit" class="btn" value="搜索"/>
                     </form>
                     <div class="form_right fl"></div>
                 </div>
