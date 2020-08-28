@@ -36,9 +36,9 @@ class sms extends \yii\base\Component
         $domain = "dysmsapi.aliyuncs.com";
 
         // TODO 此处需要替换成开发者自己的AK (https://ak-console.aliyun.com/)
-        $accessKeyId = "LTAI95CyXa0Ycza0"; // AccessKeyId
+        $accessKeyId = ""; // AccessKeyId
 
-        $accessKeySecret = "kqY0WDTJVloLrVjqsl4NChNNwW0jrl"; // AccessKeySecret
+        $accessKeySecret = ""; // AccessKeySecret
 
 
         // 暂时不支持多Region
